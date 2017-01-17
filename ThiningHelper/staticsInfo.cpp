@@ -1,5 +1,6 @@
 ﻿#include "includes.h"
 #include "staticsInfo.h"
+#include <fstream>
 
 int EndPointNum = 0;
 int TriplePointNum = 0;
@@ -76,6 +77,9 @@ int returnEndCount(const cv::Mat &src, cv::Mat &dst)
 }
 int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 {
+	std::vector<int> xvec;
+	std::vector<int> yvec;
+
 	std::cout << "In staticsInfo: return TripleCount actived! " << std::endl;
 	/*      sum_01
 	sum_10  sum_11  sum_12
@@ -101,7 +105,7 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 		0,0,1,0,1,1,1,1,   0,0,1,0,0,1,1,0,//159
 
 		0,0,1,0,1,1,1,1,   1,1,1,1,1,1,1,1,//175
-		0,0,0,0,1,1,1,0,   0,0,1,0,0,0,0,0,//191
+		0,0,1,0,1,1,1,0,   0,0,1,0,0,0,0,0,//191
 
 		0,1,0,0,0,0,0,0,   0,0,1,1,0,1,0,0,//207
 		0,1,1,0,1,1,1,1,   0,1,1,0,1,1,0,0,//223
@@ -119,12 +123,20 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 	qDebug("width = %d ", width);
 	qDebug("height = %d ", height);
 
+
+	std::ofstream output;
+	output.open("PointStatics.txt");
+	std::ofstream vec_out;
+	vec_out.open("vec_out.txt");
+	std::ofstream vec_out_after_erase;
+	vec_out_after_erase.open("vec_out_after_erase.txt");
+
 	for (int i = 0; i < height; ++i)//行循环
 	{
 		//new in 2017.1.11, 4-邻域的8-邻域的表示：1.先表示4-邻域
-		uchar * p_ln0 = src_copy.ptr<uchar>(i - 1);//获取第i行的首地址
-		uchar * p_ln1 = (i < height - 1) ? src_copy.ptr<uchar>(i) : src_copy.ptr<uchar>(i);//第i+1行
-		uchar * p_ln2 = (i < height - 2) ? src_copy.ptr<uchar>(i + 1) : src_copy.ptr<uchar>(i);//第i+2行
+		uchar * p_ln0 = (i < 1) ? src_copy.ptr<uchar>(i) : src_copy.ptr<uchar>(i - 1);//获取第i-1行的首地址
+		uchar * p_ln1 = src_copy.ptr<uchar>(i);//第i行
+		uchar * p_ln2 = (i < height - 2) ? src_copy.ptr<uchar>(i + 1) : src_copy.ptr<uchar>(i);//第i+1行
 		for (int j = 0; j < width; ++j)//列循环
 		{
 			//如果满足条件，进行标记
@@ -245,31 +257,45 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			//============== 4-neighbor judgement ===============
 				if (Triple_mark[sum_11] == 1 )
 				{
-					drawRectangle(dst, cv::Point(j, i));
+					drawCircle(dst, cv::Point(j, i));
 					triplePointCount += 1;
-					qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
+				//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
+					//显示三叉点p01,p19,p11,p12,p21的位置，其中p11为中心点
+					qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
+//print point statics
+					output << triplePointCount << std::endl;
+					output << i - 1 << "," << j << std::endl \
+						<< i << "," << j - 1 << "   " << i << "," << j << "  " << i << "," << j + 1 << std::endl \
+						<< j + 1 << "," << j << std::endl;
+					output << "___________" << std::endl;
+
+				//=======using vector to avoid backward of 4-neighbor judgement============
+					xvec.push_back(i);
+					yvec.push_back(j);
+					//qDebug("xvec = %d", xvec.size());
+/*
 					if (Triple_mark[sum_01] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 01 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount -= 1;
+						triplePointCount += 1;
 					//	drawCircle(dst, cv::Point(j, i));
 					}
 					else if (Triple_mark[sum_10] == 1 && Triple_mark[sum_11] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 10 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount -= 1;
+						triplePointCount += 1;
 						drawCircle(dst, cv::Point(j, i));
 					}
 					else if (Triple_mark[sum_12] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 12 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount -= 1;
+						triplePointCount += 1;
 						//drawCircle(dst, cv::Point(j, i));
 					}
 					else if (Triple_mark[sum_21] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 21 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount -= 1;
+						triplePointCount += 1;
 						//drawCircle(dst, cv::Point(j, i));
 					}
 					else
@@ -279,15 +305,54 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 						//drawRectangle(dst, cv::Point(j, i));
 						continue;
 					}
+					*/
 		//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
-					//drawCountNumber(dst, cv::Point(j, i), triplePointCount);
+		//drawCountNumber(dst, cv::Point(j, i), triplePointCount);
 			}
 		}
 	}
-	return triplePointCount;
+	
 	qDebug("triplePoint Num = %d", triplePointCount);
-}
+	output.close();
+//test
+	qDebug("xvec.size() = %d ", xvec.size());
+	for (std::vector<int>::size_type ii = 0; ii != xvec.size(); ++ii)
+	{
+		vec_out << xvec[ii] << ", " << yvec[ii] << std::endl;
+	}
+	vec_out.close();
+	
+//judgement
+	for (std::vector<int>::size_type ii = 0; ii != xvec.size() - 1; ++ii)
+	{
+		//out of range !! 
+		//if (ii >= xvec.size())
+		{
+			//ii = ii - 1;
+			qDebug("ii = %d ", ii);
+		if (abs(xvec[ii] - xvec[ii + 1]) == 0 && abs(yvec[ii] - yvec[ii + 1]) == 1)
+		{
+			xvec.erase(xvec.begin() + ii);
+			yvec.erase(yvec.begin() + ii);
+		}
 
+		if (abs(xvec[ii] - xvec[ii + 1]) == 1 && abs(yvec[ii] - yvec[ii + 1]) == 0)
+		{
+			xvec.erase(xvec.begin() + ii);
+			yvec.erase(yvec.begin() + ii);
+		}
+		
+		}
+	}
+	qDebug("After erase: xvec.size() = %d ", xvec.size());
+	for (std::vector<int>::size_type ii = 0; ii != xvec.size(); ++ii)
+	{
+		vec_out_after_erase << xvec[ii] << ", " << yvec[ii] << std::endl;
+	}
+	vec_out_after_erase.close();
+
+	return triplePointCount - 1;
+}
 
 void test_info(const cv::Mat &src, cv::Mat &dst)
 {
@@ -322,3 +387,21 @@ void test_info(const cv::Mat &src, cv::Mat &dst)
 		}
 	}
 }
+
+
+void fprint(int num, int i, int j)
+{
+	std::ofstream output;
+	output.open("PointStatics.txt");
+	output<< ("%d: \n \t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------",num, i - 1, j, i, j - 1, i, j, i, j + 1, j + 1, j);
+
+	output.close();
+}
+
+
+
+
+
+
+
+

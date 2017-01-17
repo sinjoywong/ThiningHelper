@@ -9,3 +9,5 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst);
 
 
 void test_info(const cv::Mat &src, cv::Mat &dst);
+void fprint(int num, int i, int j);
+
