@@ -15,9 +15,9 @@ void drawRectangle(cv::Mat img, cv::Point point_central)
 	cv::Point point_NW;
 	double len = 3;
 	point_NW.x = point_central.x - len;
-	point_NW.y = point_central.y - 2 * len;
+	point_NW.y = point_central.y -  len;
 	point_SE.x = point_central.x + len;
-	point_SE.y = point_central.y + 2 * len;
+	point_SE.y = point_central.y +  len;
 	//0.2 is line width,point_NW stands for node in North-west，point_SE stands for node in South-east，8 stands for line type
 	cv::rectangle(img, point_NW, point_SE, cv::Scalar(3, 97, 255), 0.2, 8);
 }
@@ -122,9 +122,9 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 	for (int i = 0; i < height; ++i)//行循环
 	{
 		//new in 2017.1.11, 4-邻域的8-邻域的表示：1.先表示4-邻域
-		uchar * p_ln0 = src_copy.ptr<uchar>(i);//获取第i行的首地址
-		uchar * p_ln1 = (i < height - 2) ? src_copy.ptr<uchar>(i + 1) : src_copy.ptr<uchar>(i);//第i+1行
-		uchar * p_ln2 = (i < height - 3) ? src_copy.ptr<uchar>(i + 2) : src_copy.ptr<uchar>(i);//第i+2行
+		uchar * p_ln0 = src_copy.ptr<uchar>(i - 1);//获取第i行的首地址
+		uchar * p_ln1 = (i < height - 1) ? src_copy.ptr<uchar>(i) : src_copy.ptr<uchar>(i);//第i+1行
+		uchar * p_ln2 = (i < height - 2) ? src_copy.ptr<uchar>(i + 1) : src_copy.ptr<uchar>(i);//第i+2行
 		for (int j = 0; j < width; ++j)//列循环
 		{
 			//如果满足条件，进行标记
@@ -148,7 +148,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			uchar p11_6 = (i == height - 1) ? 0 : *(p_ln1 + src_copy.step + j);
 			uchar p11_5 = (i == height - 1 || j == width - 1) ? 0 : *(p_ln1 + src_copy.step + j + 1);
 			uchar p11_7 = (i == height - 1 || j == 0) ? 0 : *(p_ln1 + src_copy.step + j - 1);
-
 			p11_9 *= 1;
 			p11_2 *= 2;
 			p11_3 *= 4;
@@ -157,7 +156,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p11_6 *= 32;
 			p11_7 *= 64;
 			p11_8 *= 128;
-
 			sum_11 = p11_9 + p11_2 + p11_3 + p11_4 + p11_5 + p11_6 + p11_7 + p11_8;
 //------------p01------------
 		//	uchar p01 = (j < width - 1) ? p_ln0[j + 1] : p_ln0[j];
@@ -171,7 +169,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			uchar p01_6 = (i == height - 1) ? 0 : *(p_ln0 + src_copy.step + j);
 			uchar p01_5 = (i == height - 1 || j == width - 1) ? 0 : *(p_ln0 + src_copy.step + j + 1);
 			uchar p01_7 = (i == height - 1 || j == 0) ? 0 : *(p_ln0 + src_copy.step + j - 1);
-
 			p01_9 *= 1;
 			p01_2 *= 2;
 			p01_3 *= 4;
@@ -180,11 +177,9 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p01_6 *= 32;
 			p01_7 *= 64;
 			p01_8 *= 128;
-
 			sum_01 = p01_9 + p01_2 + p01_3 + p01_4 + p01_5 + p01_6 + p01_7 + p01_8;
 
  //-------------p10-------------
-
 			uchar p10 = p_ln1[j-1];
 			//if (p10 != 1) { continue; }
 			uchar p10_4 = (j == width - 1) ? 0 : *(p_ln1 + j + 1);
@@ -195,7 +190,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			uchar p10_6 = (i == height - 1) ? 0 : *(p_ln1 + src_copy.step + j);
 			uchar p10_5 = (i == height - 1 || j == width - 1) ? 0 : *(p_ln1 + src_copy.step + j + 1);
 			uchar p10_7 = (i == height - 1 || j == 0) ? 0 : *(p_ln1 + src_copy.step + j - 1);
-
 			p10_9 *= 1;
 			p10_2 *= 2;
 			p10_3 *= 4;
@@ -204,12 +198,9 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p10_6 *= 32;
 			p10_7 *= 64;
 			p10_8 *= 128;
-
 			sum_10 = p10_9 + p10_2 + p10_3 + p10_4 + p10_5 + p10_6 + p10_7 + p10_8;
 
-
 //-------------p12-------------
-
 			uchar p12 = p_ln1[j + 1];
 			//if (p12 != 1) { continue; }
 			uchar p12_4 = (j == width - 1) ? 0 : *(p_ln1 + j + 1);
@@ -220,7 +211,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			uchar p12_6 = (i == height - 1) ? 0 : *(p_ln1 + src_copy.step + j);
 			uchar p12_5 = (i == height - 1 || j == width - 1) ? 0 : *(p_ln1 + src_copy.step + j + 1);
 			uchar p12_7 = (i == height - 1 || j == 0) ? 0 : *(p_ln1 + src_copy.step + j - 1);
-
 			p12_9 *= 1;
 			p12_2 *= 2;
 			p12_3 *= 4;
@@ -229,11 +219,9 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p12_6 *= 32;
 			p12_7 *= 64;
 			p12_8 *= 128;
-
 			sum_12 = p12_9 + p12_2 + p12_3 + p12_4 + p12_5 + p12_6 + p12_7 + p12_8;
 
 //-------------p21-------------
-
 			uchar p21 = p_ln2[j];
 			//if (p21 != 1) { continue; }
 			uchar p21_4 = (j == width - 1) ? 0 : *(p_ln1 + j + 1);
@@ -244,7 +232,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			uchar p21_6 = (i == height - 1) ? 0 : *(p_ln1 + src_copy.step + j);
 			uchar p21_5 = (i == height - 1 || j == width - 1) ? 0 : *(p_ln1 + src_copy.step + j + 1);
 			uchar p21_7 = (i == height - 1 || j == 0) ? 0 : *(p_ln1 + src_copy.step + j - 1);
-
 			p21_9 *= 1;
 			p21_2 *= 2;
 			p21_3 *= 4;
@@ -253,55 +240,52 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p21_6 *= 32;
 			p21_7 *= 64;
 			p21_8 *= 128;
-
 			sum_21 = p21_9 + p21_2 + p21_3 + p21_4 + p21_5 + p21_6 + p21_7 + p21_8;
 			
 			//============== 4-neighbor judgement ===============
-	
 				if (Triple_mark[sum_11] == 1 )
 				{
-					drawRectangle(dst, cv::Point(j, i + 1));
+					drawRectangle(dst, cv::Point(j, i));
 					triplePointCount += 1;
-					//qDebug(" p01 p10 p11 p12 p21 = %d,%d,%d,%d,%d ", p01, p10, p11, p12, p21);
-					
+					qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
 					if (Triple_mark[sum_01] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 01 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
 						triplePointCount -= 1;
-						drawCircle(dst, cv::Point(j, i + 1));
-					
+					//	drawCircle(dst, cv::Point(j, i));
 					}
-					else if (Triple_mark[sum_10] == 1)
+					else if (Triple_mark[sum_10] == 1 && Triple_mark[sum_11] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 10 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
 						triplePointCount -= 1;
-						drawCircle(dst, cv::Point(j, i + 1));
+						drawCircle(dst, cv::Point(j, i));
 					}
-				
 					else if (Triple_mark[sum_12] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 12 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
 						triplePointCount -= 1;
-						drawCircle(dst, cv::Point(j, i + 1));
+						//drawCircle(dst, cv::Point(j, i));
 					}
 					else if (Triple_mark[sum_21] == 1)
 					{
 					//	qDebug("[staticsInfo] 11, 21 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
 						triplePointCount -= 1;
-						drawCircle(dst, cv::Point(j, i + 1));
+						//drawCircle(dst, cv::Point(j, i));
 					}
 					else
 					{
 					//	qDebug("[staticsInfo] rec");
-						triplePointCount -= 1;
-						drawRectangle(dst, cv::Point(j, i + 1));
+						//triplePointCount -= 1;
+						//drawRectangle(dst, cv::Point(j, i));
+						continue;
 					}
 		//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
-					//drawCountNumber(dst, cv::Point(j, i + 1), triplePointCount);
+					//drawCountNumber(dst, cv::Point(j, i), triplePointCount);
 			}
 		}
 	}
 	return triplePointCount;
+	qDebug("triplePoint Num = %d", triplePointCount);
 }
 
 
