@@ -159,7 +159,7 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p11_8 *= 128;
 
 			sum_11 = p11_9 + p11_2 + p11_3 + p11_4 + p11_5 + p11_6 + p11_7 + p11_8;
-//------------p01----------------
+//------------p01------------
 		//	uchar p01 = (j < width - 1) ? p_ln0[j + 1] : p_ln0[j];
 			uchar p01 = p_ln0[j];
 		//	if (p01 != 1)  continue; 
@@ -260,42 +260,44 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 	
 				if (Triple_mark[sum_11] == 1 )
 				{
-					qDebug(" p01 p10 p11 p12 p21 = %d,%d,%d,%d,%d ", p01, p10, p11, p12, p21);
+					drawRectangle(dst, cv::Point(j, i + 1));
+					triplePointCount += 1;
+					//qDebug(" p01 p10 p11 p12 p21 = %d,%d,%d,%d,%d ", p01, p10, p11, p12, p21);
 					
 					if (Triple_mark[sum_01] == 1)
 					{
-						qDebug("[staticsInfo] 11, 01 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount += 1;
+					//	qDebug("[staticsInfo] 11, 01 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
+						triplePointCount -= 1;
 						drawCircle(dst, cv::Point(j, i + 1));
 					
 					}
 					else if (Triple_mark[sum_10] == 1)
 					{
-						qDebug("[staticsInfo] 11, 10 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount += 1;
+					//	qDebug("[staticsInfo] 11, 10 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
+						triplePointCount -= 1;
 						drawCircle(dst, cv::Point(j, i + 1));
 					}
 				
 					else if (Triple_mark[sum_12] == 1)
 					{
-						qDebug("[staticsInfo] 11, 12 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount += 1;
+					//	qDebug("[staticsInfo] 11, 12 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
+						triplePointCount -= 1;
 						drawCircle(dst, cv::Point(j, i + 1));
 					}
 					else if (Triple_mark[sum_21] == 1)
 					{
-						qDebug("[staticsInfo] 11, 21 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
-						triplePointCount += 1;
+					//	qDebug("[staticsInfo] 11, 21 Num %d, Point ( %d, %d )", triplePointCount , j, i+1);
+						triplePointCount -= 1;
 						drawCircle(dst, cv::Point(j, i + 1));
 					}
 					else
 					{
-						qDebug("[staticsInfo] rec");
-						triplePointCount += 1;
+					//	qDebug("[staticsInfo] rec");
+						triplePointCount -= 1;
 						drawRectangle(dst, cv::Point(j, i + 1));
 					}
 		//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
-					drawCountNumber(dst, cv::Point(j, i + 1), triplePointCount);
+					//drawCountNumber(dst, cv::Point(j, i + 1), triplePointCount);
 			}
 		}
 	}
