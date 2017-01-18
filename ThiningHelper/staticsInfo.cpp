@@ -2,8 +2,8 @@
 #include "staticsInfo.h"
 #include <fstream>
 
-int EndPointNum = 0;
-int TriplePointNum = 0;
+extern int EndPointNum ;
+extern int TriplePointNum ;
 
 void drawCircle(cv::Mat img, cv::Point center)
 {

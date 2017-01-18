@@ -9,8 +9,8 @@ extern cv::Mat src_filtered;//滤值之后的图像，应该还需再次二值化。此处如何改进？
  cv::Mat src_thinned_with_endpoint;
  cv::Mat src_thinned_with_triplepoint;
  cv::Mat thinImage(const cv::Mat & src, const int maxIterations = -1);
-extern  int EndPointNum;//返回的端点数目
-extern int TriplePointNum;
+  int EndPointNum;//返回的端点数目
+ int TriplePointNum;
 slider_thining::slider_thining(QWidget *parent)
 	: QDialog(parent)
 {
@@ -53,11 +53,11 @@ void slider_thining::setThiningLineEditValue(int value)
 	src_thinned.copyTo(src_thinned_with_endpoint);
 
 	EndPointNum = returnEndCount(src_thinned, src_thinned_with_endpoint);//此处的值未传到subwindow_statics.cpp中
-	qDebug("!!!slider_thining : end point num %d", EndPointNum);
+	qDebug("[slider_thining.cpp] ln60,EndPointNum: %d", EndPointNum);
 	//因为标记是直接写上去的，所以在写端点标记时会影响三叉点的判断。所以将细化后的图像src_thinned复制一份为src_thinned_with_endpoint,
 	//然后将端点和三叉点的标记都放在src_thinned_with_endpoint中。
 	TriplePointNum = returnTripleCount(src_thinned, src_thinned_with_endpoint);
-	qDebug("!!!slider_thining : triple point num %d", TriplePointNum);
+	qDebug("[slider_thining.cpp] ln60,TriplePointNum: %d", TriplePointNum);
 
 	src_thinned_mapped = src_thinned_with_endpoint * 255;
 	cv::bitwise_not(src_thinned_mapped, src_thinned_mapped);

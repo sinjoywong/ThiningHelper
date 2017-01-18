@@ -2,6 +2,8 @@
 #include "includes.h"
 #include <staticsInfo.h> 
 #include "subwindow_statics.h"
+#include <fstream>
+#include <qmessagebox.h>
 void tst();
 
 //global variables
@@ -13,6 +15,8 @@ QString filename;
 QLabel *label_img;
 extern int EndPointNum;//返回的端点数目
 extern int TriplePointNum;
+
+QString qstring_EndPointNum;
 
 ThiningHelper::ThiningHelper(QWidget *parent)
 	: QMainWindow(parent)
@@ -67,6 +71,14 @@ void ThiningHelper::iniUI()
 	widget = new QWidget();
 	widget->setLayout(mainLayout);
 	this->setCentralWidget(widget);
+
+	std::ofstream Save_statics;
+	Save_statics.open("ConnectivityStatics.txt", std::ios::out | std::ios::app | std::ios::binary);
+	Save_statics << "EndPointNum" << "\t" << "TriplePointNum" << "\t" << "Minus" << std::endl;
+	Save_statics.close();
+	
+
+
 }
 
 void tst()
@@ -97,9 +109,9 @@ void ThiningHelper::on_pushButton_loadImage_clicked()
 void ThiningHelper::on_pushButton_saveImage_clicked()
 {
 	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Save Files"),
+		tr("Save Image"),
 		"",
-		tr("Jpeg Files (*.jpg)"));
+		tr("JPEG Files (*.jpg)"));
 	std::string save_filename = fileName.toStdString();
 	if (!fileName.isNull())
 	{
@@ -148,7 +160,26 @@ void ThiningHelper::on_pushButton_staticsinfo_clicked()
 	//EndPointNum = returnEndCount(src_thinned, src_thinned);//此处的值未传到subwindow_statics.cpp中
 	qDebug("[thininghelper.cpp ln145] EndPointNum = %d", EndPointNum);
 	qDebug("[thininghelper.cpp ln145] TriplePointNum = %d", TriplePointNum);
-	w5.show();
+
+	qstring_EndPointNum = QString::number(EndPointNum);//, 10);
+
+	std::ofstream Save_statics;
+	Save_statics.open("ConnectivityStatics.txt", std::ios::out | std::ios::app | std::ios::binary);
+
+	if (Save_statics.is_open())
+	{
+		//Todo:实现表头写入只执行一次
+	//	Save_statics << "EndPointNum" << "\t" << "TriplePointNum" << "\t" << "Minus" << std::endl;
+		Save_statics << EndPointNum << "\t" << TriplePointNum << "\t" << (EndPointNum - TriplePointNum) << std::endl;
+		Save_statics.close();
+	}
+	else
+	{
+		qDebug("[thininghelper.cpp] ln167, save statics failed.");
+	}
+	qDebug("qstring_EndPointNum = %s", qstring_EndPointNum);
+	QMessageBox::about(NULL, QStringLiteral("保存数据"), QStringLiteral("数据已保存，请勿重复点击"));
+	//w5.show();
 	w2.hide();
 	w3.hide();
 	w4.hide();

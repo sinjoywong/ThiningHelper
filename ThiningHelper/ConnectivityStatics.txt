@@ -1,0 +1,9 @@
+EndPointNum	TriplePointNum	Minus
+30	7	23
+EndPointNum	TriplePointNum	Minus
+56	15	41
+22	10	12
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus

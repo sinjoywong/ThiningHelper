@@ -57,10 +57,7 @@ private:
 
 	QPushButton *btn_statics;
 
-	
-
 	QWidget *widget;
-
 
 private:
 	void iniUI();
@@ -68,7 +65,6 @@ private:
 	
 public:
 
-	// QLabel *label_img;
 private:
 	slider_threshold w2;
 	slider_filter w3;
@@ -82,15 +78,5 @@ private slots:
 	void on_pushButton_slider_filter_clicked();
 	void on_pushButton_slider_thining_clicked();
 	void on_pushButton_staticsinfo_clicked();
-	/*void Threshold_img();
-	void Filter_img();
-	void Thining_img();
-	void Statics_img();
-	*/
-
-
 };
-
-
-
 #endif // THININGHELPER_H
