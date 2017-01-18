@@ -16,9 +16,9 @@ void drawRectangle(cv::Mat img, cv::Point point_central)
 	cv::Point point_NW;
 	double len = 3;
 	point_NW.x = point_central.x - len;
-	point_NW.y = point_central.y -  len;
+	point_NW.y = point_central.y - 2 * len;
 	point_SE.x = point_central.x + len;
-	point_SE.y = point_central.y +  len;
+	point_SE.y = point_central.y + 2 * len;
 	//0.2 is line width,point_NW stands for node in North-west，point_SE stands for node in South-east，8 stands for line type
 	cv::rectangle(img, point_NW, point_SE, cv::Scalar(3, 97, 255), 0.2, 8);
 }
@@ -95,7 +95,7 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 		0,0,0,0,0,1,0,0,   0,1,1,1,0,1,0,1,//47
 		0,0,0,0,0,1,0,1,   0,0,0,0,0,0,0,0,//63
 
-		0,1,0,0,0,1,0,0,   0,1,0,0,0,1,0,0,//79
+		0,0,0,0,0,1,0,0,   0,1,1,0,0,1,0,0,//79
 		0,1,1,1,1,1,1,1,   0,1,1,1,1,1,1,1,//95
 
 		0,0,0,0,0,1,0,1,   0,1,1,1,0,1,0,0,//111
@@ -149,7 +149,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 									sum_21
 							*/
 //-------------p11-------------
-		//	uchar p11 = (j < width - 1) ? p_ln1[j + 1] : p_ln1[j];
 			uchar p11 = p_ln1[j];
 			if (p11 != 1)  continue; 
 			uchar p11_4 = (j == width - 1) ? 0 : *(p_ln1 + j + 1);
@@ -169,6 +168,8 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p11_7 *= 64;
 			p11_8 *= 128;
 			sum_11 = p11_9 + p11_2 + p11_3 + p11_4 + p11_5 + p11_6 + p11_7 + p11_8;
+
+/*
 //------------p01------------
 		//	uchar p01 = (j < width - 1) ? p_ln0[j + 1] : p_ln0[j];
 			uchar p01 = p_ln0[j];
@@ -253,13 +254,16 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 			p21_7 *= 64;
 			p21_8 *= 128;
 			sum_21 = p21_9 + p21_2 + p21_3 + p21_4 + p21_5 + p21_6 + p21_7 + p21_8;
-			
+	*/		
 			//============== 4-neighbor judgement ===============
 				if (Triple_mark[sum_11] == 1 )
 				{
-					drawCircle(dst, cv::Point(j, i));
 					triplePointCount += 1;
-				//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
+					//将三叉点的位置坐标(i,j)放入xvec 和 yvec中
+					xvec.push_back(i);
+					yvec.push_back(j);
+					//qDebug("xvec = %d", xvec.size());
+
 					//显示三叉点p01,p19,p11,p12,p21的位置，其中p11为中心点
 					qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
 //print point statics
@@ -269,10 +273,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 						<< j + 1 << "," << j << std::endl;
 					output << "___________" << std::endl;
 
-				//=======using vector to avoid backward of 4-neighbor judgement============
-					xvec.push_back(i);
-					yvec.push_back(j);
-					//qDebug("xvec = %d", xvec.size());
 /*
 					if (Triple_mark[sum_01] == 1)
 					{
@@ -307,14 +307,13 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 					}
 					*/
 		//	drawCountNumber(dst, cv::Point(j, i), triplePointCount);
-		//drawCountNumber(dst, cv::Point(j, i), triplePointCount);
 			}
 		}
 	}
 	
 	qDebug("triplePoint Num = %d", triplePointCount);
 	output.close();
-//test
+//输出所有三叉点的坐标，包含重复的点
 	qDebug("xvec.size() = %d ", xvec.size());
 	for (std::vector<int>::size_type ii = 0; ii != xvec.size(); ++ii)
 	{
@@ -322,70 +321,31 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 	}
 	vec_out.close();
 	
-//judgement
+//判断如果相邻两个三叉点被标记，则删去一个
 	for (std::vector<int>::size_type ii = 0; ii != xvec.size() - 1; ++ii)
 	{
-		//out of range !! 
-		//if (ii >= xvec.size())
-		{
-			//ii = ii - 1;
 			qDebug("ii = %d ", ii);
 		if (abs(xvec[ii] - xvec[ii + 1]) == 0 && abs(yvec[ii] - yvec[ii + 1]) == 1)
 		{
 			xvec.erase(xvec.begin() + ii);
 			yvec.erase(yvec.begin() + ii);
 		}
-
 		if (abs(xvec[ii] - xvec[ii + 1]) == 1 && abs(yvec[ii] - yvec[ii + 1]) == 0)
 		{
 			xvec.erase(xvec.begin() + ii);
 			yvec.erase(yvec.begin() + ii);
 		}
-		
-		}
 	}
+	//输出已经去除掉重复标记的三叉点的坐标,此时剩余的xvec的size就是去除重复后的三叉点数目
 	qDebug("After erase: xvec.size() = %d ", xvec.size());
 	for (std::vector<int>::size_type ii = 0; ii != xvec.size(); ++ii)
 	{
 		vec_out_after_erase << xvec[ii] << ", " << yvec[ii] << std::endl;
+		drawCircle(dst, cv::Point(yvec[ii], xvec[ii]));
 	}
 	vec_out_after_erase.close();
-
-	return triplePointCount - 1;
-}
-
-void test_info(const cv::Mat &src, cv::Mat &dst)
-{
-	assert(src.type() == CV_8UC1);
-	int width = src.cols;
-	int height = src.rows;
-	std::vector<uchar *> endPointPosition;
-	for (int i = 0; i < height; ++i)//行循环
-	{
-		uchar * p = dst.ptr<uchar>(i);//获取第i行的首地址
-		for (int j = 0; j < width; ++j)//列循环
-		{
-			//如果满足四个条件，进行标记
-			//  p9 p2 p3
-			//  p8 p1 p4
-			//  p7 p6 p5
-			uchar p1 = p[j];
-			if (p1 != 1) continue;
-			uchar p4 = (j == width - 1) ? 0 : *(p + j + 1);
-			uchar p8 = (j == 0) ? 0 : *(p + j - 1);
-			uchar p2 = (i == 0) ? 0 : *(p - dst.step + j);
-			uchar p3 = (i == 0 || j == width - 1) ? 0 : *(p - dst.step + j + 1);
-			uchar p9 = (i == 0 || j == 0) ? 0 : *(p - dst.step + j - 1);
-			uchar p6 = (i == height - 1) ? 0 : *(p + dst.step + j);
-			uchar p5 = (i == height - 1 || j == width - 1) ? 0 : *(p + dst.step + j + 1);
-			uchar p7 = (i == height - 1 || j == 0) ? 0 : *(p + dst.step + j - 1);
-			
-			if( p1 != 0)
-			{
-				drawRectangle(dst, cv::Point(j, i));//marking the end points
-			}
-		}
-	}
+	//return triplePointCount - 1;
+	return xvec.size();
 }
 
 
