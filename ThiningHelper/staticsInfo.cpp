@@ -69,7 +69,7 @@ int returnEndCount(const cv::Mat &src, cv::Mat &dst)
 			{
 				endPointCount = endPointCount + 1;//calculating the number of end points
 				drawRectangle(dst, cv::Point(j, i));//marking the end points
-				drawCountNumber(dst, cv::Point(j, i), endPointCount);//marking the number of end points
+			//	drawCountNumber(dst, cv::Point(j, i), endPointCount);//marking the number of end points
 			}
 		}
 	}
@@ -79,8 +79,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 {
 	std::vector<int> xvec;
 	std::vector<int> yvec;
-
-	std::cout << "In staticsInfo: return TripleCount actived! " << std::endl;
 	/*      sum_01
 	sum_10  sum_11  sum_12
 			sum_21
@@ -122,7 +120,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 
 	qDebug("width = %d ", width);
 	qDebug("height = %d ", height);
-
 
 	std::ofstream output;
 	output.open("PointStatics.txt");
@@ -265,7 +262,7 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 					//qDebug("xvec = %d", xvec.size());
 
 					//显示三叉点p01,p19,p11,p12,p21的位置，其中p11为中心点
-					qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
+			//		qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
 //print point statics
 					output << triplePointCount << std::endl;
 					output << i - 1 << "," << j << std::endl \
@@ -324,7 +321,7 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 //判断如果相邻两个三叉点被标记，则删去一个
 	for (std::vector<int>::size_type ii = 0; ii != xvec.size() - 1; ++ii)
 	{
-			qDebug("ii = %d ", ii);
+		//	qDebug("ii = %d ", ii);
 		if (abs(xvec[ii] - xvec[ii + 1]) == 0 && abs(yvec[ii] - yvec[ii + 1]) == 1)
 		{
 			xvec.erase(xvec.begin() + ii);

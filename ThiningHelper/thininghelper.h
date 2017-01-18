@@ -57,6 +57,8 @@ private:
 
 	QPushButton *btn_statics;
 
+	
+
 	QWidget *widget;
 
 

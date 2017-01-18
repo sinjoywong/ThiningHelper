@@ -52,7 +52,7 @@ void slider_thining::setThiningLineEditValue(int value)
 
 	src_thinned.copyTo(src_thinned_with_endpoint);
 
-	//EndPointNum = returnEndCount(src_thinned, src_thinned_with_endpoint);//此处的值未传到subwindow_statics.cpp中
+	EndPointNum = returnEndCount(src_thinned, src_thinned_with_endpoint);//此处的值未传到subwindow_statics.cpp中
 	qDebug("!!!slider_thining : end point num %d", EndPointNum);
 	//因为标记是直接写上去的，所以在写端点标记时会影响三叉点的判断。所以将细化后的图像src_thinned复制一份为src_thinned_with_endpoint,
 	//然后将端点和三叉点的标记都放在src_thinned_with_endpoint中。
