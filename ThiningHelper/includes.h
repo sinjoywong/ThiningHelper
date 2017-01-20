@@ -10,7 +10,7 @@
 #include <highgui\highgui.hpp>
 #include <string>
 #include <qdebug.h>
-#define WINDOW_NAME "PROCESSING..."
+#define WINDOW_NAME "ДІРэжа..."
 
 int getMeanNum(int pos);
 

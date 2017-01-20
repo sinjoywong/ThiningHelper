@@ -30,7 +30,8 @@ slider_thining::slider_thining(QWidget *parent)
 
 	this->setLayout(layout);
 	this->resize(255, 20);
-	this->setWindowTitle("Thining Adjust");
+	this->setWindowTitle(QStringLiteral("´¦ÀíÍ¼Ïñ"));
+	this->setWindowIcon(QIcon(":/ThiningHelper/Resources/myico.ico"));
 
 
 }

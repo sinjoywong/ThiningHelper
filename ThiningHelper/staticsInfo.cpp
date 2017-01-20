@@ -259,8 +259,6 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 					//将三叉点的位置坐标(i,j)放入xvec 和 yvec中
 					xvec.push_back(i);
 					yvec.push_back(j);
-					//qDebug("xvec = %d", xvec.size());
-
 					//显示三叉点p01,p19,p11,p12,p21的位置，其中p11为中心点
 			//		qDebug("\t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------", i-1,j, i,j-1, i,j, i,j+1, j+1,j);
 //print point statics
@@ -345,13 +343,11 @@ int returnTripleCount(const cv::Mat &src, cv::Mat &dst)
 	return xvec.size();
 }
 
-
 void fprint(int num, int i, int j)
 {
 	std::ofstream output;
 	output.open("PointStatics.txt");
 	output<< ("%d: \n \t \t %d,%d, \n %d,%d  %d,%d  %d,%d \n \t \t %d,%d \n ------------------------------",num, i - 1, j, i, j - 1, i, j, i, j + 1, j + 1, j);
-
 	output.close();
 }
 

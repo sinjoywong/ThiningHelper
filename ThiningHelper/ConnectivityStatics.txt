@@ -1,8 +1,21 @@
 EndPointNum	TriplePointNum	Minus
+59	19	40
 30	7	23
-EndPointNum	TriplePointNum	Minus
 56	15	41
 22	10	12
+EndPointNum	TriplePointNum	Minus
+21  12  9EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
+EndPointNum	TriplePointNum	Minus
 EndPointNum	TriplePointNum	Minus
 EndPointNum	TriplePointNum	Minus
 EndPointNum	TriplePointNum	Minus

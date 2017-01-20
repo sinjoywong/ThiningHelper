@@ -25,7 +25,8 @@ slider_filter::slider_filter(QWidget *parent)
 
 	this->setLayout(layout);
 	this->resize(200, 50);
-	this->setWindowTitle("Adjust Filter Value");
+	this->setWindowTitle(QStringLiteral("调整滤波强度"));
+	this->setWindowIcon(QIcon(":/ThiningHelper/Resources/myico.ico"));
 
 }
 
@@ -44,15 +45,12 @@ void slider_filter::setLineEditValue(int value)
 	cv::medianBlur(src_thresholded, src_filtered, pos);//均值滤波
 	 //TODO:另外几种滤波的选择
 
-
-
 	//这种方法很取巧。因为后期细化需要二值图像，所以需要再次threshold,直接读取会出现不可描述的错误，所以灵光一闪先在此处输出文件，\
 	再在void slider_thining::setThiningLineEditValue(int value)中读取.\
-	注意要先映射到0-255再输出才可以。此处是偶然在某代码注释中看到的，可见理论和代码量的重要性	
+	注意要先映射到0-255再输出才可以。此处是偶然在某代码注释中看到的，可见理论和代码阅读量的重要性	
 	src_filtered_mapped = src_filtered * 255;
 	cv::imwrite("src_filtered.jpg", src_filtered_mapped);
 	cv::imshow(WINDOW_NAME, src_filtered_mapped);
-	
 }
 int getMeanNum(int pos)
 {

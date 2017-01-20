@@ -47,7 +47,6 @@ subwindow_statics::subwindow_statics(QWidget *parent)
 
 	//show layout 
 	widget = new QWidget();
-//	widget->setLayout(mainLayout);
 
 	setLayout(mainLayout);
 //	this->resize(255, 20);
