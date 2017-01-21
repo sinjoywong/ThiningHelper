@@ -70,7 +70,7 @@ void ThiningHelper::iniUI()
 	widget = new QWidget();
 	widget->setLayout(mainLayout);
 	this->setCentralWidget(widget);
-	this->setWindowTitle(QStringLiteral("筏化连通数统计助手 v1.0"));//Title
+	this->setWindowTitle(QStringLiteral("筏化连通数统计助手v1.3"));//Title
 	this->setWindowIcon(QIcon(":/ThiningHelper/Resources/myico.ico"));
 
 	QString backgroundpic = (":/ThiningHelper/Resources/backgroundpic1.jpg");

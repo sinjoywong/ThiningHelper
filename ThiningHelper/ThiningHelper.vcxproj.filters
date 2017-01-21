@@ -156,5 +156,14 @@
     <ClInclude Include="GeneratedFiles\ui_subwindow_statics.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ThiningHelper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="myico.ico" />
   </ItemGroup>
 </Project>

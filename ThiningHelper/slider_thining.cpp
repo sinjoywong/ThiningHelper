@@ -11,6 +11,8 @@ extern cv::Mat src_filtered;//滤值之后的图像，应该还需再次二值化。此处如何改进？
  cv::Mat thinImage(const cv::Mat & src, const int maxIterations = -1);
   int EndPointNum;//返回的端点数目
  int TriplePointNum;
+
+
 slider_thining::slider_thining(QWidget *parent)
 	: QDialog(parent)
 {
@@ -52,6 +54,13 @@ void slider_thining::setThiningLineEditValue(int value)
 	src_thinned =thinImage(src_filtered1);
 
 	src_thinned.copyTo(src_thinned_with_endpoint);
+	//*
+	//去除边界像素测试，2017.1.21
+	int width = src_thinned.cols;
+	int height = src_thinned.rows;
+	src_thinned = src_thinned_with_endpoint(cv::Rect(5, 5, (width - 10), (height - 10)));
+	src_thinned_with_endpoint = src_thinned_with_endpoint(cv::Rect(5, 5, (width - 10), (height - 10)));
+	//*/
 
 	EndPointNum = returnEndCount(src_thinned, src_thinned_with_endpoint);//此处的值未传到subwindow_statics.cpp中
 	qDebug("[slider_thining.cpp] ln60,EndPointNum: %d", EndPointNum);

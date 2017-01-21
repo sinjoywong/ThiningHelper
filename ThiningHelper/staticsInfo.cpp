@@ -54,16 +54,17 @@ int returnEndCount(const cv::Mat &src, cv::Mat &dst)
 			//  p9 p2 p3
 			//  p8 p1 p4
 			//  p7 p6 p5
+			//2017.1.21新增：在边界外令值为1，从而切割边缘后不再判断边缘点为端点
 			uchar p1 = p[j];
 			if (p1 != 1) continue;
-			uchar p4 = (j == width - 1) ? 0 : *(p + j + 1);
-			uchar p8 = (j == 0) ? 0 : *(p + j - 1);
-			uchar p2 = (i == 0) ? 0 : *(p - src_copy1.step + j);
-			uchar p3 = (i == 0 || j == width - 1) ? 0 : *(p - src_copy1.step + j + 1);
-			uchar p9 = (i == 0 || j == 0) ? 0 : *(p - src_copy1.step + j - 1);
-			uchar p6 = (i == height - 1) ? 0 : *(p + src_copy1.step + j);
-			uchar p5 = (i == height - 1 || j == width - 1) ? 0 : *(p + src_copy1.step + j + 1);
-			uchar p7 = (i == height - 1 || j == 0) ? 0 : *(p + src_copy1.step + j - 1);
+			uchar p4 = (j == width - 1) ? 1 : *(p + j + 1);
+			uchar p8 = (j == 0) ? 1 : *(p + j - 1);
+			uchar p2 = (i == 0) ? 1 : *(p - src_copy1.step + j);
+			uchar p3 = (i == 0 || j == width - 1) ? 1 : *(p - src_copy1.step + j + 1);
+			uchar p9 = (i == 0 || j == 0) ? 1 : *(p - src_copy1.step + j - 1);
+			uchar p6 = (i == height - 1) ? 1 : *(p + src_copy1.step + j);
+			uchar p5 = (i == height - 1 || j == width - 1) ? 1 : *(p + src_copy1.step + j + 1);
+			uchar p7 = (i == height - 1 || j == 0) ? 1 : *(p + src_copy1.step + j - 1);
 
 			if (p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 == 1)
 			{

@@ -246,6 +246,7 @@
     <ClInclude Include="GeneratedFiles\ui_subwindow_statics.h" />
     <ClInclude Include="GeneratedFiles\ui_thininghelper.h" />
     <ClInclude Include="includes.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="staticsInfo.h" />
     <CustomBuild Include="subwindow_statics.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
@@ -419,6 +420,12 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\ui_%(Filename).h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\uic.exe" -o ".\GeneratedFiles\ui_%(Filename).h" "%(FullPath)"</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ThiningHelper.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="myico.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
