@@ -2,7 +2,6 @@
     <qresource prefix="/ThiningHelper">
         <file>Resources/ico.png</file>
         <file>Resources/myico.ico</file>
-        <file>Resources/backgroundpic.jpg</file>
         <file>Resources/backgroundpic1.jpg</file>
     </qresource>
 </RCC>

@@ -14,7 +14,8 @@ class slider_thining : public QDialog
 public:
 	slider_thining(QWidget *parent = 0);
 	~slider_thining();
-	
+	//void on_mouse(int event, int x, int y, int flags, void *ustc);
+	static void on_mouse(int event, int x, int y, int flags, void* param);
 private:
 	Ui::slider_thining ui;
 
@@ -24,6 +25,7 @@ private:
 	QLabel *label3;
 	private slots:
 	void setThiningLineEditValue(int);
+	
 };
 
 #endif // SLIDER_THINING_H
