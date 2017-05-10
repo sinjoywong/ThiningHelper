@@ -13,6 +13,6 @@
 #define WINDOW_NAME "ДІРэжа..."
 
 int getMeanNum(int pos);
-
+void resize_picture(cv::Mat &src, cv::Mat &dst);
 //QString filename;
 	

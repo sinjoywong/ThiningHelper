@@ -95,6 +95,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_subwindow_statics.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="resize_picture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="thininghelper.h">

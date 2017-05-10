@@ -4,21 +4,21 @@
 #include "staticsInfo.h"
 
 extern cv::Mat src_filtered;//滤值之后的图像，应该还需再次二值化。此处如何改进？目前办法：先写文件，再读文件
- cv::Mat src_thinned;
- cv::Mat src_thinned_mapped;
- cv::Mat src_thinned_with_endpoint;
- cv::Mat src_thinned_with_triplepoint;
- cv::Mat thinImage(const cv::Mat & src, const int maxIterations = -1);
-  int EndPointNum;//返回的端点数目
- int TriplePointNum;
- cv::Mat src_thinned_cutted;
- cv::Mat img;
- cv::Mat tmp;
+cv::Mat src_thinned;
+cv::Mat src_thinned_mapped;
+cv::Mat src_thinned_with_endpoint;
+cv::Mat src_thinned_with_triplepoint;
+cv::Mat thinImage(const cv::Mat & src, const int maxIterations = -1);
+int EndPointNum;//返回的端点数目
+int TriplePointNum;
+cv::Mat src_thinned_cutted;
+cv::Mat img;
+cv::Mat tmp;
 slider_thining::slider_thining(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-	
+
 	Value_Slider_Thining = new QLineEdit("1");
 	Slider_Thining = new QSlider(Qt::Horizontal);
 	Slider_Thining->setMinimum(1);
@@ -52,9 +52,9 @@ void slider_thining::setThiningLineEditValue(int value)
 
 	//一种讨巧的办法，因为需要以grayscale形式读入，所以在上一步输出文件，这一步读取该文件
 	cv::Mat src_filtered1 = cv::imread("src_filtered.jpg", cv::IMREAD_GRAYSCALE);
-	cv::threshold(src_filtered1, src_filtered1,pos,1,cv::THRESH_BINARY_INV);
-//	cv::threshold(src_filtered1, src_filtered1,128,1,cv::THRESH_BINARY_INV);
-	src_thinned =thinImage(src_filtered1);
+	cv::threshold(src_filtered1, src_filtered1, pos, 1, cv::THRESH_BINARY_INV);
+	//	cv::threshold(src_filtered1, src_filtered1,128,1,cv::THRESH_BINARY_INV);
+	src_thinned = thinImage(src_filtered1);
 
 	/*
 	//src_thinned.copyTo(src_thinned_with_endpoint);
@@ -88,6 +88,7 @@ void slider_thining::setThiningLineEditValue(int value)
 
 	src_thinned_mapped = src_thinned_with_endpoint * 255;
 	cv::bitwise_not(src_thinned_mapped, src_thinned_mapped);
+	cv::namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 	cv::imshow(WINDOW_NAME, src_thinned_mapped);
 	cv::imwrite("final.jpg", src_thinned_mapped);
 }
@@ -95,7 +96,7 @@ using namespace cv;
 //void slider_thining::on_mouse(int event, int x, int y, int flags, void *ustc)//event鼠标事件代号，x,y鼠标坐标，flags拖拽和键盘操作的代号  
 void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 {
-;
+	;
 	static Point pre_pt = (-1, -1);//初始坐标  
 	static Point cur_pt = (-1, -1);//实时坐标  
 	char temp[16];
@@ -108,17 +109,17 @@ void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 		circle(img, pre_pt, 2, Scalar(255, 0, 0, 0), CV_FILLED, CV_AA, 0);//划圆  
 		img = img * 255;
 		cv::bitwise_not(img, img);
-
+		namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 		imshow(WINDOW_NAME, img);
 	}
 	else if (event == CV_EVENT_MOUSEMOVE && !(flags & CV_EVENT_FLAG_LBUTTON))//左键没有按下的情况下鼠标移动的处理函数  
 	{
 		return;
 		/*
-		img.copyTo(tmp);//将img复制到临时图像tmp上，用于显示实时坐标  
+		img.copyTo(tmp);//将img复制到临时图像tmp上，用于显示实时坐标
 		sprintf(temp, "(%d,%d)", x, y);
 		cur_pt = Point(x, y);
-		putText(tmp, temp, cur_pt, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0, 255));//只是实时显示鼠标移动的坐标  
+		putText(tmp, temp, cur_pt, FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0, 0, 0, 255));//只是实时显示鼠标移动的坐标
 		namedWindow("mouseLeft not pushed");
 		imshow("mouseLeft not pushed", tmp);
 		*/
@@ -132,7 +133,8 @@ void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 		rectangle(tmp, pre_pt, cur_pt, Scalar(0, 255, 0, 0), 1, 8, 0);//在临时图像上实时显示鼠标拖动时形成的矩形  
 		tmp = tmp * 255;
 		cv::bitwise_not(tmp, tmp);
-		imshow(WINDOW_NAME ,tmp);
+		namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
+		imshow(WINDOW_NAME, tmp);
 	}
 	else if (event == CV_EVENT_LBUTTONUP)//左键松开，将在图像上划矩形  
 	{
@@ -159,7 +161,7 @@ void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 		TriplePointNum = returnTripleCount(src_thinned_cutted, src_thinned_cutted_marked);
 		src_thinned_cutted_marked = src_thinned_cutted_marked * 255;
 		cv::bitwise_not(src_thinned_cutted_marked, src_thinned_cutted_marked);
-
+		namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 		imshow(WINDOW_NAME, src_thinned_cutted_marked);
 		waitKey(0);
 	}

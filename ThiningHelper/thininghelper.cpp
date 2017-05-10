@@ -90,6 +90,7 @@ void ThiningHelper::on_pushButton_loadImage_clicked()
 	std::string filename_cv = code->fromUnicode(filename).data();
 	//std::string filename_cv = filename.toStdString();
 	cv::Mat src = cv::imread(filename_cv, cv::IMREAD_GRAYSCALE);
+	cv::namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 	cv::imshow(WINDOW_NAME, src);
 }
 

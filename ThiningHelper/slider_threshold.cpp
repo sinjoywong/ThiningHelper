@@ -53,6 +53,7 @@ void slider_threshold::setThresholdLineEditValue(int value)
 
 	cv::threshold(src, src_thresholded, pos, 1, cv::THRESH_BINARY);
 	src_thresholded_mapped = src_thresholded * 255;
+	cv::namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 	cv::imshow(WINDOW_NAME, src_thresholded_mapped);
 //	cv::imwrite("src_thresholded.jpg",src_thresholded);
 }

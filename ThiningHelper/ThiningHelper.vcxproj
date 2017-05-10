@@ -192,6 +192,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="resize_picture.cpp" />
     <ClCompile Include="slider_filter.cpp" />
     <ClCompile Include="slider_thining.cpp" />
     <ClCompile Include="slider_threshold.cpp" />
