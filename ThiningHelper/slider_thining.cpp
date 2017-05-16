@@ -14,16 +14,19 @@ int TriplePointNum;
 cv::Mat src_thinned_cutted;
 cv::Mat img;
 cv::Mat tmp;
+extern cv::Mat src_filtered_mapped;
+extern cv::Mat src_filtered;
+cv::Mat src_thinned_cutted_marked;
 slider_thining::slider_thining(QWidget *parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 
-	Value_Slider_Thining = new QLineEdit("1");
+	Value_Slider_Thining = new QLineEdit("12");
 	Slider_Thining = new QSlider(Qt::Horizontal);
-	Slider_Thining->setMinimum(1);
+	Slider_Thining->setMinimum(2);
 	Slider_Thining->setMaximum(255);
-	Slider_Thining->setValue(128);
+	Slider_Thining->setValue(12);
 
 	connect(Slider_Thining, SIGNAL(valueChanged(int)), this, SLOT(setThiningLineEditValue(int)));
 
@@ -49,9 +52,9 @@ void slider_thining::setThiningLineEditValue(int value)
 	int pos = Slider_Thining->value();
 	QString str = QString("%1").arg(pos);
 	Value_Slider_Thining->setText(str);
-
 	//一种讨巧的办法，因为需要以grayscale形式读入，所以在上一步输出文件，这一步读取该文件
 	cv::Mat src_filtered1 = cv::imread("src_filtered.jpg", cv::IMREAD_GRAYSCALE);
+	//cv::cvtColor(src_filtered_mapped, src_filtered1, 6);
 	cv::threshold(src_filtered1, src_filtered1, pos, 1, cv::THRESH_BINARY_INV);
 	//	cv::threshold(src_filtered1, src_filtered1,128,1,cv::THRESH_BINARY_INV);
 	src_thinned = thinImage(src_filtered1);
@@ -78,6 +81,7 @@ void slider_thining::setThiningLineEditValue(int value)
 	src_thinned.copyTo(src_thinned_before_cut);
 
 	cv::setMouseCallback(WINDOW_NAME, on_mouse, 0);
+	
 	src_thinned_cutted.copyTo(src_thinned_with_endpoint);
 	EndPointNum = returnEndCount(src_thinned_cutted, src_thinned_with_endpoint);//此处的值未传到subwindow_statics.cpp中
 	qDebug("[slider_thining.cpp] ln60,EndPointNum: %d", EndPointNum);
@@ -90,7 +94,8 @@ void slider_thining::setThiningLineEditValue(int value)
 	cv::bitwise_not(src_thinned_mapped, src_thinned_mapped);
 	cv::namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 	cv::imshow(WINDOW_NAME, src_thinned_mapped);
-	cv::imwrite("final.jpg", src_thinned_mapped);
+	//cv::imwrite("final.jpg", src_thinned_mapped);
+	
 }
 using namespace cv;
 //void slider_thining::on_mouse(int event, int x, int y, int flags, void *ustc)//event鼠标事件代号，x,y鼠标坐标，flags拖拽和键盘操作的代号  
@@ -155,7 +160,7 @@ void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 			return;
 		}
 		src_thinned_cutted = src_thinned(Rect(min(cur_pt.x, pre_pt.x), min(cur_pt.y, pre_pt.y), width, height));
-		cv::Mat src_thinned_cutted_marked;
+		
 		src_thinned_cutted.copyTo(src_thinned_cutted_marked);
 		EndPointNum = returnEndCount(src_thinned_cutted, src_thinned_cutted_marked);
 		TriplePointNum = returnTripleCount(src_thinned_cutted, src_thinned_cutted_marked);
@@ -163,6 +168,7 @@ void slider_thining::on_mouse(int event, int x, int y, int flags, void* param)
 		cv::bitwise_not(src_thinned_cutted_marked, src_thinned_cutted_marked);
 		namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 		imshow(WINDOW_NAME, src_thinned_cutted_marked);
+		cv::imwrite("final.jpg", src_thinned_cutted_marked);
 		waitKey(0);
 	}
 }

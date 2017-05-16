@@ -16,7 +16,7 @@ QString filename;
 QLabel *label_img;
 extern int EndPointNum;//返回的端点数目
 extern int TriplePointNum;
-
+extern cv::Mat src_thinned_cutted_marked;
 QString qstring_EndPointNum;
 
 ThiningHelper::ThiningHelper(QWidget *parent)
@@ -103,7 +103,8 @@ void ThiningHelper::on_pushButton_saveImage_clicked()
 	std::string save_filename = fileName.toStdString();
 	if (!fileName.isNull())
 	{
-		cv::imwrite(save_filename, src_thinned_mapped);
+		//cv::imwrite(save_filename, src_thinned_mapped);
+		cv::imwrite(save_filename, src_thinned_cutted_marked);
 		qDebug("[thininghelper.cpp] ln108, save Image clicked");
 	}
 	else

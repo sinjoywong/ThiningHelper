@@ -35,8 +35,7 @@ slider_filter::~slider_filter()
 
 }
 
-void slider_filter::setLineEditValue(int value)
-{
+void slider_filter::setLineEditValue(int value) {
 	int pos = Slider_Filter->value();
 	pos = getMeanNum(pos);
 	QString str = QString("%1").arg(pos);
@@ -49,9 +48,10 @@ void slider_filter::setLineEditValue(int value)
 	再在void slider_thining::setThiningLineEditValue(int value)中读取.\
 	注意要先映射到0-255再输出才可以。此处是偶然在某代码注释中看到的，可见理论和代码阅读量的重要性	
 	src_filtered_mapped = src_filtered * 255;
-	cv::imwrite("src_filtered.jpg", src_filtered_mapped);
+	//cv::bitwise_not(src_filtered_mapped, src_filtered_mapped);
 	cv::namedWindow(WINDOW_NAME, CV_WINDOW_NORMAL);
 	cv::imshow(WINDOW_NAME, src_filtered_mapped);
+	cv::imwrite("src_filtered.jpg", src_filtered_mapped);
 }
 int getMeanNum(int pos)
 {

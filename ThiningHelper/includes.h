@@ -10,6 +10,8 @@
 #include <highgui\highgui.hpp>
 #include <string>
 #include <qdebug.h>
+#include "opencv2/imgproc.hpp"
+#include "opencv2/imgproc/types_c.h"
 #define WINDOW_NAME "¥¶¿Ì÷–..."
 
 int getMeanNum(int pos);
